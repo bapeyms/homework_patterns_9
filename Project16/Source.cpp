@@ -50,7 +50,7 @@ public:
 		}
 	}
 };
-class CreditDebtHandler : public Handler
+class DebtHandler : public Handler
 {
 public:
 	void handleRequest(string n, double cs, double in, double d, int a) override
@@ -76,6 +76,25 @@ public:
 
 int main()
 {
+	Handler* h1 = new AgeHandler();
+	Handler* h2 = new CreditScoreHandler();
+	Handler* h3 = new DebtHandler();
+	Handler* h4 = new FinalHardler();
 
+	h1->setSuccessor(h2);
+	h2->setSuccessor(h3);
+	h3->setSuccessor(h4);
+
+	cout << "- CLIENT #1 -" << endl;
+	h1->handleRequest("Masha", 333, 99999999, 67, 67);
+	cout << endl;
+
+	cout << "- CLIENT #2 -" << endl;
+	h1->handleRequest("Angelina", 666, 99999999, 20, 67);
+
+	delete h1;
+	delete h2;
+	delete h3;
+	delete h4;
 	return 0;
 }
