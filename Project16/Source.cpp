@@ -24,13 +24,43 @@ class AgeHandler : public Handler
 public:
 	void handleRequest(string n, double cs, double in, double d, int a)
 	{
-		if (age < 18)
+		if (a < 18)
 		{
 			cout << "Refusal! Age < 18" << endl;
 		}
 		else
 		{
-			successor->handleRequest(n, double cs, double in, double d, int a);
+			successor->handleRequest(n, cs, in, d, a);
+		}
+	}
+};
+class CreditScoreHandler : public Handler
+{
+public:
+	void handleRequest(string n, double cs, double in, double d, int a)
+	{
+		if (cs < 18)
+		{
+			cout << "Refusal! Credit score < 500" << endl;
+		}
+		else
+		{
+			successor->handleRequest(n, cs, in, d, a);
+		}
+	}
+};
+class CreditDebt : public Handler
+{
+public:
+	void handleRequest(string n, double cs, double in, double d, int a)
+	{
+		if (in > in * 0.5)
+		{
+			cout << "Refusal! Debt > " << in * 0.5 << endl;
+		}
+		else
+		{
+			successor->handleRequest(n, cs, in, d, a);
 		}
 	}
 };
