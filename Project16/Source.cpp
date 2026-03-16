@@ -5,28 +5,29 @@ using namespace std;
 class Handler
 {
 protected:
-	Handler* successor;
-	string name;
-	double creditScore;
-	double income;
-	double debt;
-	int age;
+	Handler* successor = nullptr;
 public:
 	virtual ~Handler() = default;
 	void setSuccessor(Handler* successor)
 	{
 		this->successor = successor;
 	}
-	virtual void handleRequest(string n, double cs, double in, double d, int a) = 0;
+	virtual void handleRequest(string n, double cs, double in, double d, int a)
+	{
+		if (successor)
+		{
+			successor->handleRequest(n, cs, in, d, a);
+		}
+	}
 };
 class AgeHandler : public Handler
 {
 public:
-	void handleRequest(string n, double cs, double in, double d, int a)
+	void handleRequest(string n, double cs, double in, double d, int a) override
 	{
 		if (a < 18)
 		{
-			cout << "Refusal! Age < 18" << endl;
+			cout << "Refusal for " << n << " : Age < 18" << endl;
 		}
 		else
 		{
@@ -37,11 +38,11 @@ public:
 class CreditScoreHandler : public Handler
 {
 public:
-	void handleRequest(string n, double cs, double in, double d, int a)
+	void handleRequest(string n, double cs, double in, double d, int a) override
 	{
-		if (cs < 18)
+		if (cs < 500)
 		{
-			cout << "Refusal! Credit score < 500" << endl;
+			cout << "Refusal for " << n << " : Credit score < 500" << endl;
 		}
 		else
 		{
@@ -49,19 +50,27 @@ public:
 		}
 	}
 };
-class CreditDebt : public Handler
+class CreditDebtHandler : public Handler
 {
 public:
-	void handleRequest(string n, double cs, double in, double d, int a)
+	void handleRequest(string n, double cs, double in, double d, int a) override
 	{
-		if (in > in * 0.5)
+		if (d > in * 0.5)
 		{
-			cout << "Refusal! Debt > " << in * 0.5 << endl;
+			cout << "Refusal for " << n << " : Debt > " << in * 0.5 << endl;
 		}
 		else
 		{
 			successor->handleRequest(n, cs, in, d, a);
 		}
+	}
+};
+class FinalHardler : public Handler
+{
+public:
+	void handleRequest(string n, double cs, double in, double d, int a) override
+	{
+		cout << "Success! Load approved for " << n << "!" << endl;
 	}
 };
 
